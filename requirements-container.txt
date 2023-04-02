@@ -1,0 +1,4 @@
+pyspark==3.3.2
+pandasql==0.7.3
+pandas==1.5.3
+polars==0.16.11

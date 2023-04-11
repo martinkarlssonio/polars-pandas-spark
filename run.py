@@ -32,8 +32,10 @@ def dockerLog(event,testType,dataframeN):
                     # Taking in to account the amount of cores the CPU has
                     cpuDelta = status["cpu_stats"]["cpu_usage"]["total_usage"] - status["precpu_stats"]["cpu_usage"]["total_usage"]
                     systemDelta = status["cpu_stats"]["system_cpu_usage"] - status["precpu_stats"]["system_cpu_usage"]
-                    cpuPercent = (cpuDelta / systemDelta) * len(status["cpu_stats"]["cpu_usage"]["percpu_usage"]) * 100
+                    #print("systemDelta: "+str(systemDelta)+" cpuDelta: "+str(cpuDelta))
+                    cpuPercent = (cpuDelta / systemDelta) * (status["cpu_stats"]["online_cpus"]) * 100
                     cpuPercent = int(cpuPercent)
+                    #print("cpuPercent: "+str(cpuPercent)+"%")
                     #Fetch the memory consumption for the container
                     mem = status["memory_stats"]["usage"]
                     mem = int(mem/1000000)
@@ -45,8 +47,11 @@ def dockerLog(event,testType,dataframeN):
                         cpuLog.append(cpuPercent)
                         memLog.append(mem)
                 except Exception as e:
+                    #print("Error: "+str(e))
+                    #print(json.dumps(status, indent=4, sort_keys=True))
                     break
         except Exception as e:
+            #print("Error: "+str(e))
             pass
         if event.is_set():
             break
@@ -120,7 +125,12 @@ def removeContainers():
     for container in containers:
         if imageName in str(container.image):
             print("################################################### Deleting old container {}".format(container.name))
-            container.remove()
+            try:
+                container.stop()
+                container.remove()
+            except Exception as e:
+                print("################################################### Error deleting old container {}".format(container.name))
+                print(e)
 
 def runContainer(testType,dataframeN):
     images = dockerClient.images.list(all=True)
@@ -145,7 +155,7 @@ if __name__ == "__main__":
             runContainer(testType,dataframeN)
             endEpoch = int(time.time()*1000)
             timeSpent = float((endEpoch-startEpoch)/1000)
-            print(timeSpent)
+            print("Time spent : {}".format(timeSpent))
             event.set()
             dockerLogThread.join()
 

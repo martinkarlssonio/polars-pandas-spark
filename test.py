@@ -1,5 +1,5 @@
 #SPARK
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, Row
 spark = SparkSession.builder.appName('sparkdf').getOrCreate()
 #PANDAS
 import pandas as pd
@@ -50,7 +50,9 @@ pandasDf = pd.DataFrame(dataDict)
 #Create a Polars Dataframe
 polarsDf = pl.DataFrame(dataDict)
 #Create a Spark dataframe
-sparkDf = spark.createDataFrame(pandasDf)
+dataList = [Row(**{k: v[i] for k, v in dataDict.items()}) for i in range(len(dataDict["id"]))]
+sparkDf = spark.createDataFrame(dataList)
+#sparkDf = spark.createDataFrame(pandasDf)
 
 #Pandas single core by default
 def pandasTest(testDf):

@@ -1,2 +1,2 @@
-matplotlib==3.6.2
-docker
+matplotlib==3.7.1
+docker==6.0.1

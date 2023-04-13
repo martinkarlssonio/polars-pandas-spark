@@ -67,7 +67,7 @@ Email : hello@martinkarlsson.io \
 Webpage : [www.martinkarlsson.io](https://www.martinkarlsson.io)
 
 
-Project Link: [github.com/martinkarlssonio/polars-pandas-sparkn](https://github.com/martinkarlssonio/polars-pandas-spark)
+Project Link: [github.com/martinkarlssonio/polars-pandas-spark](https://github.com/martinkarlssonio/polars-pandas-spark)
 
 
 <!-- MARKDOWN LINKS & IMAGES -->

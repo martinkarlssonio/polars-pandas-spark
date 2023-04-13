@@ -16,16 +16,25 @@ The test starts 4 x 3 containers in series and logs the CPU, Memory and Time con
 Pandas, Spark and Polars will be used to find unique values on a given column, and in an iteration grouping and sum up the column values.
 
 Spark:
+
 (`testDf.select("id").rdd.flatMap(lambda x: x).collect()`)
+
 (`testDf.groupby("id").sum()`)
+
 
 Pandas:
+
 (`list(testDf['id'].unique())`)
+
 (`testDf.groupby("id").sum()`)
 
+
 Polars:
+
 (`list(testDf['id'].unique())`)
+
 (`testDf.groupby("id").sum()`)
+
 
 ![Architecture overview][arch]
 

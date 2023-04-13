@@ -17,23 +17,23 @@ Pandas, Spark and Polars will be used to find unique values on a given column, a
 
 Spark:
 
-(`testDf.select("id").rdd.flatMap(lambda x: x).collect()`)
+`testDf.select("id").rdd.flatMap(lambda x: x).collect()`
 
-(`testDf.groupby("id").sum()`)
+`testDf.groupby("id").sum()`
 
 
 Pandas:
 
-(`list(testDf['id'].unique())`)
+`list(testDf['id'].unique())`
 
-(`testDf.groupby("id").sum()`)
+`testDf.groupby("id").sum()`
 
 
 Polars:
 
-(`list(testDf['id'].unique())`)
+`list(testDf['id'].unique())`
 
-(`testDf.groupby("id").sum()`)
+`testDf.groupby("id").sum()`
 
 
 ![Architecture overview][arch]

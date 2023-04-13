@@ -1,19 +1,4 @@
 # polars-pandas-spark
-Comparison between three popular Python packages for handling tabular data.
-The test starts 4 x 3 containers in series and logs the CPU, Memory and Time consumed for each.
-Pandas, Spark and Polars will be used to find unique values on a given column, and in an iteration grouping and sum up the column values.
-
-Spark:
-testDf.select("id").rdd.flatMap(lambda x: x).collect()
-testDf.groupby("id").sum()
-
-Pandas:
-list(testDf['id'].unique())
-testDf.groupby("id").sum()
-
-Polars:
-list(testDf['id'].unique())
-testDf.groupby("id").sum()
 
 <!--
 *** Written by Martin Karlsson
@@ -26,7 +11,21 @@ testDf.groupby("id").sum()
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Purpose for this tutorial is to show ..
+Comparison between three popular Python packages for handling tabular data.
+The test starts 4 x 3 containers in series and logs the CPU, Memory and Time consumed for each.
+Pandas, Spark and Polars will be used to find unique values on a given column, and in an iteration grouping and sum up the column values.
+
+Spark:
+(`testDf.select("id").rdd.flatMap(lambda x: x).collect()`)
+(`testDf.groupby("id").sum()`)
+
+Pandas:
+(`list(testDf['id'].unique())`)
+(`testDf.groupby("id").sum()`)
+
+Polars:
+(`list(testDf['id'].unique())`)
+(`testDf.groupby("id").sum()`)
 
 ![Architecture overview][arch]
 

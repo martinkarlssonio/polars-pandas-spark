@@ -39,11 +39,11 @@ Polars:
 ![Architecture overview][arch]
 
 ## Pre-requisite
-- Confirmed working on Linux (and WSL on Windows)
-- Ensure Docker is installed.
+Confirmed working on Linux (and WSL on Windows)
+Ensure that you have Docker, Python and Pip installed.
+
 
 ## Start
-
 Execute `bash run.sh` to start the the build and start the containers.
 
 <!-- CONTRIBUTING -->
@@ -67,7 +67,7 @@ Email : hello@martinkarlsson.io \
 Webpage : [www.martinkarlsson.io](https://www.martinkarlsson.io)
 
 
-Project Link: [github.com/martinkarlssonio/big-data-solution](https://github.com/martinkarlssonio/big-data-solution)
+Project Link: [github.com/martinkarlssonio/polars-pandas-sparkn](https://github.com/martinkarlssonio/polars-pandas-spark)
 
 
 <!-- MARKDOWN LINKS & IMAGES -->

@@ -6,5 +6,4 @@ mkdir polarsPandasSpark-venv
 #cd polarsPandasSpark-venv
 python3 -m venv polarsPandasSpark-venv/env
 pip3 install -r requirements-venv.txt
-python3 run.py
-#sudo docker run --name tabular-comp tabular-comp
+python3 main.py

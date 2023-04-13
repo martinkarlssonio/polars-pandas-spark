@@ -47,11 +47,14 @@ def dockerLog(event,testType,dataframeN):
                         cpuLog.append(cpuPercent)
                         memLog.append(mem)
                 except Exception as e:
-                    #print("Error: "+str(e))
+                    print("Error: "+str(e))
+                    #print(json.dumps(status["memory_stats"]))
+                    status = container.stats(decode=None, stream = False)
+                    #print(json.dumps(status))
                     #print(json.dumps(status, indent=4, sort_keys=True))
                     break
         except Exception as e:
-            #print("Error: "+str(e))
+            print("Error: "+str(e))
             pass
         if event.is_set():
             break

@@ -9,7 +9,6 @@ import polars as pl
 import random
 import time
 import os
-import logging
 
 #Configuration
 testType = str(os.getenv('TEST_TYPE', default="polars"))
@@ -88,23 +87,20 @@ def sparkTest(testDf):
 if __name__ == "__main__":
     ##PANDAS
     if testType == "pandas":
-        logging.info("##################### START WITH PANDAS")
+        print("##################### START WITH PANDAS")
         time.sleep(10)
         pandasTimeSpent = pandasTest(pandasDf)
-        logging.info("##################### Pandas iteration took : {}s".format(pandasTimeSpent))
-        logging.info(" ")
-
+        print("##################### Pandas iteration took : {}s".format(pandasTimeSpent))
     ##POLARS
     if testType == "polars":
-        logging.info("##################### START WITH POLARS")
+        print("##################### START WITH POLARS")
         time.sleep(10)
         polarsTimeSpent = polarsTest(polarsDf)
-        logging.info("##################### Polars iteration took : {}s".format(polarsTimeSpent))
-        logging.info(" ")
+        print("##################### Polars iteration took : {}s".format(polarsTimeSpent))
 
     ##SPARK
     if testType == "spark":
-        logging.info("##################### START WITH SPARK")
+        print("##################### START WITH SPARK")
         time.sleep(10)
         sparkTimeSpent = sparkTest(sparkDf)
-        logging.info("##################### Spark iteration took : {}s".format(sparkTimeSpent))
+        print("##################### Spark iteration took : {}s".format(sparkTimeSpent))

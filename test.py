@@ -14,11 +14,12 @@ import os
 testType = str(os.getenv('TEST_TYPE', default="polars"))
 dataframeN = int(os.getenv('DATAFRAME_N', default="10000"))
 calcN = int(os.getenv('CALC_N', default="1000"))
+cardinality = int(os.getenv('CARDINALITY', default="50"))
 
 def mockedDict():
     #Generate a list of unique ID's
     uniqueIdList = []
-    for n in range(1,50):
+    for n in range(1,cardinality):
         uniqueIdList.append("machine"+str(n))
     #Generate mocked data
     idList = []

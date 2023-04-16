@@ -39,7 +39,7 @@ Polars:
 ![Architecture overview][arch]
 
 ## Pre-requisite
-Confirmed working on Linux (and WSL on Windows)
+Confirmed working on Linux, WSL on Windows and macOS (M1)
 Ensure that you have Docker, Python and Pip installed.
 
 

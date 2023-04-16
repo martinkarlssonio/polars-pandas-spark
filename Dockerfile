@@ -13,7 +13,10 @@ COPY requirements-container.txt /requirements.txt
 RUN pip3 install -r requirements.txt
 
 ##JAVA
-RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
+ENV TZ=Europe/Stockholm
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apt-get update && apt-get install -y tzdata
+#RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
 RUN apt install -y openjdk-8-jdk
 
 ##COPY IN FILES

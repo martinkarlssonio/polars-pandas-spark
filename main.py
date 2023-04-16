@@ -16,7 +16,7 @@ imageName = "tabular-comp"
 containerStatsName = "containerStats.json"
 #dataframeN = 1000000
 calcN = 10000
-cardinality = 5000
+cardinalities = [50,5000]
 testTypes = ["spark","polars","pandas"]
 dataframeNs = [2500,25000,250000,2500000]
 
@@ -63,7 +63,7 @@ def dockerLog(event,testType,dataframeN,cardinality):
             break
     # Write the logging to a file
     endEpoch = int(time.time()*1000)
-    with open("output/"+str(dataframeN)+"_"+testType+"_"+containerStatsName, "w") as f:
+    with open("output/"+str(dataframeN)+"_"+str(cardinality)+"_"+testType+"_"+containerStatsName, "w") as f:
         json.dump({"mem":memLog,"cpu":cpuLog,"timeSpent":float((endEpoch-startEpoch)/1000)}, f)
     print("################################################### dockerLog ended")
 
@@ -78,49 +78,56 @@ def visMemCpu():
             with open("output/"+file, "r") as fp:
                 data = json.load(fp)
             fileSplit = file.split("_")
-            rows = fileSplit[0]
-            lib = fileSplit[1]
+            rows = str(fileSplit[0])
+            cardinality = str(fileSplit[1])
+            lib = fileSplit[2]
             try:
-                combDict[rows][lib] = {}
-                combDict[rows][lib]["mem"] = data["mem"]
-                combDict[rows][lib]["cpu"] = data["cpu"]
-                combDict[rows][lib]["timeSpent"] = int(data["timeSpent"])
+                combDict[rows][lib][cardinality] = {}
+                combDict[rows][lib][cardinality] ["mem"] = data["mem"]
+                combDict[rows][lib][cardinality] ["cpu"] = data["cpu"]
+                combDict[rows][lib][cardinality] ["timeSpent"] = int(data["timeSpent"])
             except:
-                combDict[rows] = {}
-                combDict[rows][lib] = {}
-                combDict[rows][lib]["mem"] = data["mem"]
-                combDict[rows][lib]["cpu"] = data["cpu"]
-                combDict[rows][lib]["timeSpent"] = int(data["timeSpent"])
+                try:
+                    combDict[rows][lib] = {}
+                except:
+                    combDict[rows] = {}
+                    combDict[rows][lib] = {}
+                combDict[rows][lib][cardinality] = {}
+                combDict[rows][lib][cardinality] ["mem"] = data["mem"]
+                combDict[rows][lib][cardinality] ["cpu"] = data["cpu"]
+                combDict[rows][lib][cardinality] ["timeSpent"] = int(data["timeSpent"])
     with open("output/all.json", "w") as f:
         json.dump(combDict, f)
 
-    for rows in combDict.keys():
-        # Dictionary to store a color for each library
-        colorDict = {}
-        colorDict["pandas"] = "tab:blue"
-        colorDict["polars"] = "tab:orange"
-        colorDict["spark"] = "tab:green"
-        textString = " | "
-        plt.clf()
-        for lib in combDict[rows].keys():
-            plt.plot(combDict[rows][lib]["mem"], label=lib, color=colorDict[lib])
-            textString += lib + " " + str(combDict[rows][lib]["timeSpent"]) + "s | "
-        plt.xticks([], [])
-        plt.ylabel("Memory MB")
-        plt.title(textString)
-        plt.xlabel("Cardinality : "+ str(cardinality) + " Dataframe rows : " + rows)
-        plt.legend(framealpha=1, frameon=True)
-        plt.savefig("output/"+"{}_mem.png".format(str(rows)), dpi=300)
-        plt.clf()
-        for lib in combDict[rows].keys():
-            plt.plot(combDict[rows][lib]["cpu"], label=lib, color=colorDict[lib])
-        plt.xticks([], [])
-        plt.ylabel("CPU %")
-        plt.xlabel("Cardinality : "+ str(cardinality) + " Dataframe rows : " + rows)
-        plt.title(textString)
-        plt.legend(framealpha=1, frameon=True)
-        plt.savefig("output/"+"{}_cpu.png".format(str(rows)), dpi=300)
-    plt.yticks([], [])
+    for cardinality in cardinalities:
+        cardinality = str(cardinality)
+        for rows in combDict.keys():
+            # Dictionary to store a color for each library
+            colorDict = {}
+            colorDict["pandas"] = "tab:blue"
+            colorDict["polars"] = "tab:orange"
+            colorDict["spark"] = "tab:green"
+            textString = " | "
+            plt.clf()
+            for lib in combDict[rows].keys():
+                plt.plot(combDict[rows][lib][cardinality]["mem"], label=lib, color=colorDict[lib])
+                textString += lib + " " + str(combDict[rows][lib][cardinality]["timeSpent"]) + "s | "
+            plt.xticks([], [])
+            plt.ylabel("Memory MB")
+            plt.title(textString)
+            plt.xlabel("Cardinality : "+ str(cardinality) + " Dataframe rows : " + rows)
+            plt.legend(framealpha=1, frameon=True)
+            plt.savefig("output/"+"{}_{}_mem.png".format(str(rows),str(cardinality)), dpi=300)
+            plt.clf()
+            for lib in combDict[rows].keys():
+                plt.plot(combDict[rows][lib][cardinality]["cpu"], label=lib, color=colorDict[lib])
+            plt.xticks([], [])
+            plt.ylabel("CPU %")
+            plt.xlabel("Cardinality : "+ str(cardinality) + " Dataframe rows : " + rows)
+            plt.title(textString)
+            plt.legend(framealpha=1, frameon=True)
+            plt.savefig("output/"+"{}_{}_cpu.png".format(str(rows),str(cardinality)), dpi=300)
+        plt.yticks([], [])
 
 def getContainers():
     containersReturn = []
@@ -178,17 +185,18 @@ def runContainer(testType,dataframeN):
 if __name__ == "__main__":
     # for testType in testTypes:
     #     for dataframeN in dataframeNs:
-    #         removeContainers()
-    #         event = Event()
-    #         print("Starting {} {}".format(testType,dataframeN))
-    #         dockerLogThread = Thread(target=dockerLog, args=(event,testType,dataframeN,cardinality,))
-    #         dockerLogThread.start()
-    #         startEpoch = int(time.time()*1000)
-    #         runContainer(testType,dataframeN)
-    #         endEpoch = int(time.time()*1000)
-    #         timeSpent = float((endEpoch-startEpoch)/1000)
-    #         print("Time spent : {}".format(timeSpent))
-    #         event.set()
-    #         dockerLogThread.join()
+    #         for cardinality in cardinalities:
+    #             removeContainers()
+    #             event = Event()
+    #             print("Starting {} {}".format(testType,dataframeN))
+    #             dockerLogThread = Thread(target=dockerLog, args=(event,testType,dataframeN,cardinality,))
+    #             dockerLogThread.start()
+    #             startEpoch = int(time.time()*1000)
+    #             runContainer(testType,dataframeN)
+    #             endEpoch = int(time.time()*1000)
+    #             timeSpent = float((endEpoch-startEpoch)/1000)
+    #             print("Time spent : {}".format(timeSpent))
+    #             event.set()
+    #             dockerLogThread.join()
     #Visualize with matplotlib
     visMemCpu()

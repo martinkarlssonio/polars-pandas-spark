@@ -183,20 +183,20 @@ def runContainer(testType,dataframeN):
                 continue
 
 if __name__ == "__main__":
-    # for testType in testTypes:
-    #     for dataframeN in dataframeNs:
-    #         for cardinality in cardinalities:
-    #             removeContainers()
-    #             event = Event()
-    #             print("Starting {} {}".format(testType,dataframeN))
-    #             dockerLogThread = Thread(target=dockerLog, args=(event,testType,dataframeN,cardinality,))
-    #             dockerLogThread.start()
-    #             startEpoch = int(time.time()*1000)
-    #             runContainer(testType,dataframeN)
-    #             endEpoch = int(time.time()*1000)
-    #             timeSpent = float((endEpoch-startEpoch)/1000)
-    #             print("Time spent : {}".format(timeSpent))
-    #             event.set()
-    #             dockerLogThread.join()
+     for testType in testTypes:
+         for dataframeN in dataframeNs:
+             for cardinality in cardinalities:
+                 removeContainers()
+                 event = Event()
+                 print("Starting {} {}".format(testType,dataframeN))
+                 dockerLogThread = Thread(target=dockerLog, args=(event,testType,dataframeN,cardinality,))
+                 dockerLogThread.start()
+                 startEpoch = int(time.time()*1000)
+                 runContainer(testType,dataframeN)
+                 endEpoch = int(time.time()*1000)
+                 timeSpent = float((endEpoch-startEpoch)/1000)
+                 print("Time spent : {}".format(timeSpent))
+                 event.set()
+                 dockerLogThread.join()
     #Visualize with matplotlib
     visMemCpu()
